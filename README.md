@@ -93,12 +93,20 @@ Files go to `data/<env>/expert_data.npy` (change it with `--data_dir` or `QAIRL_
 |---|---|
 | `inverted_pendulum`, `inverted_double_pendulum`, `hopper`, `halfcheetah`, `ant` | every episode of the Minari dataset `mujoco/<task>/expert-v0` |
 | `fetch_pick`, `fetch_push` | scripted experts of tiago-fetch-envs (200 Pick and 40 Push demos), regenerated exactly |
-| `pendulum` | 40 rollouts of a PPO expert, on Hugging Face (link to be added) |
+| `pendulum` | 40 rollouts of a PPO expert, downloaded from [FranJNaranjo/qa-irl-data](https://huggingface.co/datasets/FranJNaranjo/qa-irl-data) |
 
 ## Pretrained checkpoints
 
-The policies shown in the GIFs are on Hugging Face (link to be added), with their `hparams.json` and, for
-Push, the VecNormalize statistics. Evaluate one with `python -m qairl.evaluate --run <directory>`.
+The policies shown in the GIFs are on Hugging Face at
+[FranJNaranjo/qa-irl-checkpoints](https://huggingface.co/FranJNaranjo/qa-irl-checkpoints), with their
+`hparams.json` and, for Push, the VecNormalize statistics. The two Fetch checkpoints are the ones deployed
+on the physical robot and were trained with an earlier configuration of the method; the model card lists
+it.
+
+```bash
+hf download FranJNaranjo/qa-irl-checkpoints --local-dir qa-irl-checkpoints
+python -m qairl.evaluate --run qa-irl-checkpoints/hopper
+```
 
 ## Training and evaluation
 

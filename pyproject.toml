@@ -19,7 +19,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-data = ["minari>=0.5"]
+data = ["minari>=0.5", "huggingface_hub>=0.20"]
 fetch = ["tiago-fetch-envs @ git+https://github.com/FranJNaranjo/tiago-fetch-envs.git"]
 test = ["pytest"]
 

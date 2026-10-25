@@ -8,12 +8,12 @@ Each file is an array of dicts, one per trajectory, with observations, actions, 
 next_observations and dones.
 
 MuJoCo tasks: every episode of the Minari dataset mujoco/<task>/expert-v0, converted without filtering
-(needs `pip install minari`; Minari downloads the dataset on first use).
+(Minari downloads the dataset on first use).
 Fetch tasks: recorded with the scripted experts of tiago-fetch-envs, with the settings of the paper (200
 Pick demos with perturbed routes and action noise 0.05 to 0.15; 40 Push demos with action noise 0.05).
 The generator is deterministic, so this reproduces the demonstrations used in the paper.
-Pendulum: 40 rollouts of a PPO expert, recorded without a fixed seed, so they cannot be regenerated; the
-file used in the paper is distributed with the data release (see the README).
+Pendulum: 40 rollouts of a PPO expert, recorded without a fixed seed, so they cannot be regenerated. The
+file used in the paper is downloaded from the Hugging Face dataset FranJNaranjo/qa-irl-data.
 """
 
 import argparse
@@ -38,6 +38,7 @@ FETCH = {
                    "--noise-max", "0.15"],
     "fetch_push": ["--task", "push"],
 }
+HF_DATASET = "FranJNaranjo/qa-irl-data"
 ALL = list(MINARI) + list(FETCH) + ["pendulum"]
 
 
@@ -69,6 +70,14 @@ def from_fetch_expert(name: str, out_path: str) -> None:
     print(f"[data] {name}: scripted expert demos -> {out_path}")
 
 
+def from_hugging_face(name: str, out_path: str) -> None:
+    from huggingface_hub import hf_hub_download
+
+    src = hf_hub_download(HF_DATASET, f"{name}/expert_data.npy", repo_type="dataset")
+    shutil.copy(src, out_path)
+    print(f"[data] {name}: {HF_DATASET} -> {out_path}")
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--env", nargs="+", choices=ALL, default=[])
@@ -87,7 +96,7 @@ def main() -> None:
         elif name in FETCH:
             from_fetch_expert(name, out_path)
         else:
-            print(f"[data] {name}: download it from the data release and place it at {out_path}")
+            from_hugging_face(name, out_path)
 
 
 if __name__ == "__main__":
