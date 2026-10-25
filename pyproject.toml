@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qairl"
+version = "0.1.0"
+description = "QA-IRL: inverse reinforcement learning with a learned quasimetric"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Francisco J. Naranjo-Campos" }]
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0",
+    "stable-baselines3>=2.3",
+    "gymnasium[mujoco]>=1.0",
+    "numpy",
+    "tensorboard",
+]
+
+[project.optional-dependencies]
+data = ["minari>=0.5"]
+fetch = ["tiago-fetch-envs @ git+https://github.com/FranJNaranjo/tiago-fetch-envs.git"]
+test = ["pytest"]
+
+[project.urls]
+Repository = "https://github.com/FranJNaranjo/qa-irl"
+
+[tool.setuptools.packages.find]
+include = ["qairl*"]
